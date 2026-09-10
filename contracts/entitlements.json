@@ -1,0 +1,23 @@
+{
+  "version": "2026-09-10.1",
+  "plans": {
+    "free": {
+      "storage_bytes": 1073741824,
+      "published_works": 100,
+      "publishes_per_day": 20,
+      "saves": 5000,
+      "collections": 100,
+      "public_collections": 25,
+      "collection_entries": 100,
+      "active_preparations": 5,
+      "active_jobs": 2,
+      "api_keys": 3,
+      "profile_handles": 20
+    }
+  },
+  "import_grant": {
+    "preparations": 3,
+    "bytes": 157286400,
+    "days": 14
+  }
+}

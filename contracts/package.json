@@ -1,0 +1,48 @@
+{
+  "name": "@artzine/contracts",
+  "version": "0.1.1",
+  "description": "Canonical Artzine contracts and runtime validation",
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./consumer": {
+      "types": "./dist/consumer.d.ts",
+      "import": "./dist/consumer.js"
+    },
+    "./openapi.json": "./dist/generated/openapi.json",
+    "./media.json": "./media.json",
+    "./entitlements.json": "./entitlements.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "media.json",
+    "entitlements.json"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node ../scripts/build-contracts.mjs"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artzine/artzine.git",
+    "directory": "contracts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

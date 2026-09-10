@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+.env
+.env.local
+.cache/
+.astro/
+*.tsbuildinfo
+
+.artifacts/
+.wrangler/
+.dev.vars*
+coverage/
+playwright-report/
+test-results/

@@ -1,0 +1,38 @@
+{
+  "name": "@artzine/sdk",
+  "version": "0.1.1",
+  "description": "Typed Artzine HTTP client with direct S3 upload helpers",
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@artzine/contracts": "workspace:*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artzine/artzine.git",
+    "directory": "packages/sdk"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

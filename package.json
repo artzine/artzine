@@ -1,0 +1,39 @@
+{
+  "name": "artzine",
+  "version": "0.1.1",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "packageManager": "pnpm@10.33.2",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "generate": "node scripts/generate-contracts.mjs",
+    "check:generated": "node scripts/generate-contracts.mjs --check",
+    "format": "biome format --write .",
+    "lint": "biome check . && node scripts/check-boundaries.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "pnpm generate && pnpm --filter @artzine/contracts build && pnpm --filter @artzine/sdk build",
+    "verify": "pnpm check:generated && pnpm lint && pnpm build && pnpm typecheck && pnpm test && pnpm release:prepare",
+    "release:prepare": "node scripts/prepare-release.mjs",
+    "release:candidate": "node scripts/distribute-release.mjs candidate",
+    "release:verify": "node scripts/distribute-release.mjs verify",
+    "release:promote": "node scripts/distribute-release.mjs promote"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.12",
+    "@types/node": "24.13.3",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "esbuild": "0.28.2",
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11",
+    "yaml": "2.9.0",
+    "@artzine/contracts": "workspace:*",
+    "@artzine/sdk": "workspace:*",
+    "@playwright/test": "1.63.0"
+  }
+}

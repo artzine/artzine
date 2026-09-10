@@ -1,0 +1,48 @@
+{
+  "version": "2026-09-09.3",
+  "limits": {
+    "image_bytes": 16777216,
+    "image_pixels": 25000000,
+    "work_files": 20,
+    "work_bytes": 52428800,
+    "html_bytes": 5242880,
+    "source_bytes": 1048576,
+    "source_files": 10
+  },
+  "presets": {
+    "image.single": {
+      "medium": "image",
+      "primary_min": 1,
+      "primary_max": 1
+    },
+    "image.series": {
+      "medium": "image",
+      "primary_min": 2,
+      "primary_max": 20
+    },
+    "browser.stage": {
+      "medium": "browser",
+      "primary_min": 1,
+      "primary_max": 1,
+      "requires_cover": true
+    },
+    "code.study": {
+      "medium": "code",
+      "source_min": 1,
+      "source_max": 10,
+      "requires_examples": true
+    },
+    "reference.external": {
+      "medium": "reference",
+      "requires_source_url": true
+    }
+  },
+  "image_recipe": {
+    "version": "image-2",
+    "widths": [480, 960, 1920, 2560],
+    "format": "webp",
+    "social_format": "jpeg",
+    "social_width": 1200,
+    "no_upscale": true
+  }
+}
