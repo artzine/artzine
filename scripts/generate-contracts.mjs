@@ -15,6 +15,32 @@ const bytes = await Promise.all(
   names.map((name) => readFile(`${root}contracts/${name}`, "utf8")),
 );
 const api = parse(bytes[0]);
+const workPresets = Object.keys(JSON.parse(bytes[1]).presets).sort();
+const collectionPresets = [
+  ...api.components.schemas.CollectionDraft.properties.preset.enum,
+].sort();
+for (const name of ["Work", "WorkDraft"]) {
+  const declared = api.components.schemas[name].properties.preset.enum;
+  if (JSON.stringify([...declared].sort()) !== JSON.stringify(workPresets))
+    throw new Error(`Media registry/preset schema drift: ${name}`);
+}
+function checkPresets(schema, path) {
+  if (!schema || typeof schema !== "object") return;
+  const preset = schema.properties?.preset?.enum;
+  if (preset) {
+    const expected = preset.every((id) => id.startsWith("zine."))
+      ? collectionPresets
+      : preset.some((id) => id.startsWith("zine."))
+        ? [...workPresets, ...collectionPresets].sort()
+        : workPresets;
+    if (JSON.stringify([...preset].sort()) !== JSON.stringify(expected))
+      throw new Error(`Preset projection drift: ${path}`);
+  }
+  for (const [name, child] of Object.entries(schema))
+    if (child && typeof child === "object")
+      checkPresets(child, `${path}.${name}`);
+}
+checkPresets(api, "openapi");
 if (
   api.components.schemas.OwnedProfile.properties.retained_handles.maxItems !==
   JSON.parse(bytes[2]).plans.free.profile_handles
