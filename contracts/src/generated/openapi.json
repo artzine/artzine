@@ -8987,6 +8987,15 @@
                 "type": "null"
               }
             ]
+          },
+          "preview_works": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 2,
+            "items": {
+              "$ref": "#/components/schemas/Work"
+            },
+            "description": "Up to two publicly available works selected from the cover and opening entries, in order. Unavailable works are omitted."
           }
         },
         "required": [
@@ -9771,6 +9780,17 @@
               "minimum": 1,
               "maximum": 4096
             }
+          },
+          "colour_analysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageColourAnalysis"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional analysis; older or unanalysed images may omit it."
           }
         },
         "required": [
@@ -10166,6 +10186,51 @@
           "request_id",
           "contract_version",
           "result"
+        ]
+      },
+      "ImageColourAnalysis": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Versioned colour measurements of an admitted image in sRGB. Swatches describe approximate visible-pixel proportions, excluding fully transparent pixels.",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "const": 1
+          },
+          "space": {
+            "type": "string",
+            "const": "srgb"
+          },
+          "swatches": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "hex": {
+                  "type": "string",
+                  "pattern": "^#[a-f0-9]{6}$"
+                },
+                "weight": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "hex",
+                "weight"
+              ]
+            }
+          }
+        },
+        "required": [
+          "version",
+          "space",
+          "swatches"
         ]
       }
     }

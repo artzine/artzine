@@ -1,6 +1,6 @@
 # API reference
 
-Generated from the canonical contract. Version 0.1.0; digest `sha256:eea66c5812140736e839b2384202cefda1a5b6e4b5f3d93764a8ae87afe3fc78`.
+Generated from the canonical contract. Version 0.1.0; digest `sha256:fd668ca89b09500b7e36e3deed4cdace394419cd917b9987eb737a134abad01b`.
 
 | Operation | HTTP | Scope | MCP |
 | --- | --- | --- | --- |
