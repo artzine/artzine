@@ -13,20 +13,27 @@ The output in `.artifacts/release/manifest.json` records source, lockfile,
 contract, artifact integrity and consumer results. A dirty checkout can prepare
 local artifacts but cannot publish them.
 
-With `NPM_TOKEN` or `NODE_AUTH_TOKEN` available to the process:
+Publication runs only in `.github/workflows/release.yml`, dispatched on `main`
+with the exact version. npm trusts that workflow through trusted publishing:
+each npm command exchanges the job's GitHub OIDC token for a short-lived
+credential, so no registry token exists. Both packages' trusted publisher
+entries allow `npm dist-tag`, which needs npm 11.21 or later; the workflow
+installs it after packing.
 
-1. Run `pnpm release:candidate` to publish the exact prepared tarballs with the
-   `next` tag, in dependency order. Conflicting existing versions stop the entire
-   step before publication. Exact existing versions are verified and reused.
-2. Run `pnpm release:verify` to read registry metadata and tarball bytes and run
-   the same independent consumers against exact registry versions. This records
-   verification bound to the prepared manifest.
-3. Run `pnpm release:promote` after release acceptance to move `latest` to those
-   verified versions. Every tag is read back. The command requires the retained
-   registry verification for the same manifest and source.
+1. Dispatch with `action: candidate`. It runs `pnpm release:candidate` to
+   publish the exact prepared tarballs with the `next` tag, in dependency
+   order, then `pnpm release:verify`. Conflicting existing versions stop the
+   entire step before publication. Exact existing versions are verified and
+   reused.
+2. `pnpm release:verify` reads registry metadata and tarball bytes and runs the
+   same independent consumers against exact registry versions. This records
+   verification bound to the prepared manifest. It needs no credential and
+   also runs locally.
+3. After release acceptance, dispatch with `action: promote`. It packs the same
+   commit again, verifies the registry holds those exact bytes, then runs
+   `pnpm release:promote` to move `latest` to them. Every tag is read back.
 
-The candidate workflow runs the first two steps on `main` for an explicitly
-requested version and retains the artifacts. It never promotes `latest`.
+A candidate run never promotes `latest`, and each run retains its artifacts.
 Publication is resumable: the registry's exact integrity is authoritative for a
 version whose earlier response was lost. No command overwrites or unpublishes a
 version. Keep the manifest and completed readbacks when reconciling a partial

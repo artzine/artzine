@@ -154,34 +154,23 @@ async function main() {
     assert.equal(verified.manifest_sha256, manifestDigest);
     assert.ok([...observed.values()].every(Boolean));
   }
+  // npm authenticates through trusted publishing: in the release workflow it
+  // exchanges the job's GitHub OIDC token for a short-lived credential, so no
+  // registry token exists to configure.
+  assert.ok(
+    process.env.ACTIONS_ID_TOKEN_REQUEST_URL,
+    "Distribution runs in the release workflow, which npm trusts",
+  );
   const configDirectory = await mkdtemp(resolve(tmpdir(), "artzine-registry-"));
   const config = resolve(configDirectory, ".npmrc");
   try {
-    assert.ok(
-      process.env.NODE_AUTH_TOKEN || process.env.NPM_TOKEN,
-      "Registry authentication is missing",
-    );
-    await writeFile(
-      config,
-      `registry=${registry}\n//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}\n`,
-      { mode: 0o600 },
-    );
+    await writeFile(config, `registry=${registry}\n`, { mode: 0o600 });
     const npm = (args) =>
       execFileSync(
         "npm",
         [...args, "--userconfig", config, `--registry=${registry}`],
-        {
-          cwd: root,
-          stdio: "pipe",
-          timeout: 180000,
-          env: {
-            ...process.env,
-            NODE_AUTH_TOKEN:
-              process.env.NODE_AUTH_TOKEN || process.env.NPM_TOKEN,
-          },
-        },
+        { cwd: root, stdio: "pipe", timeout: 180000 },
       );
-    npm(["whoami"]);
     const completed = [];
     for (const p of manifest.packages) {
       if (action === "candidate" && !observed.get(p.name)) {
